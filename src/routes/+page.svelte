@@ -13,15 +13,14 @@
         bgPhotos = bgPhotos;
     }
 
-    function run() {
-        console.log('RUN');
-        console.log(bgPhotos);
-        photobounce.run();
-        refresh != refresh;
-    }
-
+    function handleKeydown(event: KeyboardEvent) {
+		if(event.code == "Space") {
+            photobounce.exitFullscreen();
+        }
+	}
 </script>
 
+<svelte:window on:keydown={(event) => handleKeydown(event)}/>
 <div class="grid gap-1 justify-center justify-items-center items-center h-screen w-screen">
     <div class="text-6xl">Photo Bounce</div>
     <PhotoBounce 
@@ -43,5 +42,5 @@
         <button on:click={() => {uploadBackgroundPhotos()}}>Upload Background Images</button>
         <div class="text-lg">{bgPhotos ? bgPhotos.length : 0} Selected</div>
     </div>
-    <button on:click={()=> {run()}} type=submit>RUN</button>
+    <button on:click={()=> {photobounce.requestFullscreen();}} type=submit>Fullscreen</button>
 </div>
