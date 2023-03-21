@@ -10,9 +10,19 @@
     export let width: Number = 64;
     export let height: Number = 36;
     export let bgColor: String = "black"
+    
     export let bgPhotos: FileList;
+    export let bgInterval: number;
 
     let bgIndex = 0;
+
+    let clear: number;
+    $: if(bgPhotos && bgInterval > 0) {
+        clearInterval(clear)
+        clear = setInterval(nextBGPhoto, bgInterval * 1000)
+    } else {
+        clearInterval(clear)
+    }
 
     onMount(() => {
       if (screenfull.isEnabled) {

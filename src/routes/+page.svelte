@@ -5,8 +5,7 @@
 
     let bgFileInput: HTMLInputElement;
     let bgPhotos: FileList;
-
-    let refresh: boolean = true;
+    let bgInterval: number = 10;
 
     function uploadBackgroundPhotos() {
         bgFileInput.click();
@@ -29,6 +28,7 @@
         height={36}
         bgColor={"black"}
         {bgPhotos}
+        {bgInterval}
     />
     <input
         class="hidden"
@@ -42,5 +42,15 @@
         <button on:click={() => {uploadBackgroundPhotos()}}>Upload Background Images</button>
         <div class="text-lg">{bgPhotos ? bgPhotos.length : 0} Selected</div>
     </div>
+    <div>
+        <input
+            type="number"
+            max="600"
+            min="1"
+            bind:value={bgInterval}
+        />
+        <div>sec</div>
+    </div>
+
     <button on:click={()=> {photobounce.requestFullscreen();}} type=submit>Fullscreen</button>
 </div>
