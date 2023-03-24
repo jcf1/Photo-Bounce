@@ -1,16 +1,16 @@
 <script lang="ts">
     import { onMount, onDestroy, createEventDispatcher } from "svelte";
     import screenfull from "screenfull";
+    import Bounce from "./Bounce.svelte";
 
     // Variables to make PhotoBounce fullscreen
     let component: HTMLElement;
     const dispatch = createEventDispatcher<{ change: never; error: never }>();
 
+    export let width: number;
+    export let height: number;
 
-    export let width: Number = 64;
-    export let height: Number = 36;
     export let bgColor: String = "black"
-    
     export let bgPhotos: FileList;
     export let bgInterval: number;
 
@@ -59,9 +59,13 @@
     }
 </script>
 
-<div style="width:0; height:0" bind:this={component} />
-<div class="flex items-center justify-center" style={getStyle()}>
+<div style="width:0; height:0" bind:this={component}/>
+<div class="flex relative items-center justify-center" style={getStyle()} bind:clientWidth={width} bind:clientHeight={height}>
     {#if bgPhotos}
         <img class="w-full h-full" src={URL.createObjectURL(bgPhotos[bgIndex])} alt=""/>
     {/if}
+    <Bounce
+        parentWidth={width}
+        parentHeight={height}
+    />
 </div>
