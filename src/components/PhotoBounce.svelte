@@ -14,6 +14,10 @@
     export let bgPhotos: FileList;
     export let bgInterval: number;
 
+    export let fgColor: String = "black"
+    export let fgPhotos: FileList;
+    export let fgInterval: number;
+
     let bgIndex = 0;
 
     let clear: number;
@@ -67,5 +71,8 @@
     <Bounce
         parentWidth={width}
         parentHeight={height}
+        {fgColor}
+        {fgPhotos}
+        {fgInterval}
     />
 </div>

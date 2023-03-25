@@ -4,6 +4,10 @@
     export let parentWidth: number;
     export let parentHeight: number;
 
+    export let fgColor: String = "black"
+    export let fgPhotos: FileList;
+    export let fgInterval: number;
+
     export let sizeMulti: number = 0.25;
 
     interface Position {
@@ -22,6 +26,16 @@
     };
 
     let bounceStyle: string = '';
+
+    let fgIndex = 0;
+
+    let interval: number;
+    $: if(fgPhotos && fgInterval > 0) {
+        clearInterval(interval)
+        interval = setInterval(nextFGPhoto, fgInterval * 1000)
+    } else {
+        clearInterval(interval)
+    }
 
     onMount(() => {
         size = sizeMulti * (parentWidth > parentHeight ? parentWidth : parentHeight);
@@ -46,6 +60,10 @@
 
     export function clear(): void {
         reset();
+    }
+
+    function nextFGPhoto(): void {
+        fgIndex = (fgIndex + 1) % fgPhotos.length;
     }
 
     function move() {
@@ -85,5 +103,8 @@
 </script>
 
 <div class="absolute items-center text-center flex justify-center bg-red-500"  bind:this={element} style={bounceStyle}>
+    {#if fgPhotos}
+        <img class="w-full h-full" src={URL.createObjectURL(fgPhotos[fgIndex])} alt=""/>
+    {/if}
 </div>
 
