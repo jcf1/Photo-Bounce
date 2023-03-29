@@ -7,17 +7,22 @@
     let component: HTMLElement;
     const dispatch = createEventDispatcher<{ change: never; error: never }>();
 
-    export let width: number;
-    export let height: number;
+    export let initWidth: number;
+    export let initHeight: number;
 
-    export let bgColor: String = "black"
     export let bgPhotos: FileList;
+    export let bgImageSize: String;
+    export let bgColor: String;
     export let bgInterval: number;
 
-    export let fgColor: String = "black"
     export let fgPhotos: FileList;
+    export let fgImageSize: String;
+    export let fgColor: String;
+    export let fgTransparent: boolean;
     export let fgInterval: number;
 
+    let width: number;
+    let height: number;
     let bgIndex = 0;
 
     let clear: number;
@@ -54,25 +59,23 @@
         }
     }
 
-    function getStyle(): string {
-        return "height:"+height+"vh; width:"+width+"vh; background-color:"+bgColor+";"
-    }
-
     function nextBGPhoto(): void {
         bgIndex = (bgIndex + 1) % bgPhotos.length;
     }
 </script>
 
 <div style="width:0; height:0" bind:this={component}/>
-<div class="flex relative items-center justify-center" style={getStyle()} bind:clientWidth={width} bind:clientHeight={height}>
+<div class="flex relative items-center justify-center" style={`width:${initWidth}vh;height:${initHeight}vh;background-color:${bgColor};`} bind:clientWidth={width} bind:clientHeight={height}>
     {#if bgPhotos}
-        <img class="w-full h-full" src={URL.createObjectURL(bgPhotos[bgIndex])} alt=""/>
+        <img class="w-full h-full" style={`object-fit:${bgImageSize};`} src={URL.createObjectURL(bgPhotos[bgIndex])} alt=""/>
     {/if}
     <Bounce
         parentWidth={width}
         parentHeight={height}
-        {fgColor}
         {fgPhotos}
+        {fgImageSize}
+        {fgColor}
+        {fgTransparent}
         {fgInterval}
     />
 </div>
