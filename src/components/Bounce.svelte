@@ -7,9 +7,7 @@
     export let fgPhotos: FileList;
     export let fgImageSize: String;
     export let fgColor: String;
-    export let fgTransparent: boolean;
     export let fgInterval: number;
-
 
     export let sizeMulti: number = 0.25;
 
@@ -82,7 +80,7 @@
         let yBuffer = 0;
 
         //Get image dimentions if transparent background is chosen to get accurate screen bounces
-        if((fgImageSize === "contain") && fgTransparent) {
+        if((fgImageSize === "contain") && (fgColor === "#00000000")) {
             if(currImage !== undefined) {
                 let imgWidth: number = currImage.naturalWidth;
                 let imgHeight: number = currImage.naturalHeight;

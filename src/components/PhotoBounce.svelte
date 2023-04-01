@@ -18,7 +18,6 @@
     export let fgPhotos: FileList;
     export let fgImageSize: String;
     export let fgColor: String;
-    export let fgTransparent: boolean;
     export let fgInterval: number;
 
     let width: number;
@@ -75,7 +74,6 @@
         {fgPhotos}
         {fgImageSize}
         {fgColor}
-        {fgTransparent}
         {fgInterval}
     />
 </div>
