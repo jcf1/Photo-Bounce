@@ -5,7 +5,7 @@
     let photobounce: PhotoBounce;
 
     // Background Setings
-    let bgPhotos: FileList;
+    let bgPhotos: File[];
     let bgImageSize: string;
     let bgColor: string;
     let bgInterval: number;

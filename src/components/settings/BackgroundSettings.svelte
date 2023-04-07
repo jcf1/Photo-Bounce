@@ -1,6 +1,10 @@
 <script lang="ts">
+    import PhotoList from '../PhotoList.svelte';
+
     let bgFileInput: HTMLInputElement;
-    export let bgPhotos: FileList;
+    let uploads: FileList;
+    export let bgPhotos: File[] = [];
+
     export let bgImageSize: string = "cover";
     export let bgColor: string = "#000000";
 
@@ -9,19 +13,32 @@
     let bounce: boolean = false;
 
     $: bgInterval = bounce ? 0 : interval;
+    $: if(uploads && uploads.length > 0) {
+        updatePhotos()
+    }
+
+    function updatePhotos() {
+        bgPhotos = bgPhotos.concat(Array.from(uploads));
+    }
 
     function uploadBackgroundPhotos() {
         bgFileInput.click();
-        bgPhotos = bgPhotos;
     }
 </script>
 
-<input class="hidden" accept="image/png, image/jpeg, image/jpg" multiple type="file" bind:this={bgFileInput} bind:files={bgPhotos}/>
+<input class="hidden" accept="image/png, image/jpeg, image/jpg" multiple type="file" bind:this={bgFileInput} bind:files={uploads}/>
 <div class="justify-center">
     
     <div class="flex flex-row justify-center">
-        <button id="upload-button" class="bg-red-600" on:click={() => {uploadBackgroundPhotos()}}>Upload Background Images</button>
-        <label for="upload-button" class="text-lg">{bgPhotos ? bgPhotos.length : 0} Selected</label>
+        <button class="bg-red-600" on:click={() => {uploadBackgroundPhotos()}}>Upload Background Images</button>
+    </div>
+
+    <div class="flex flex-row justify-center">
+        {#if bgPhotos && bgPhotos.length > 0}
+            <PhotoList bind:photolist={bgPhotos}/>
+        {:else}
+            <div>No Photos Selected</div>
+        {/if}
     </div>
 
     <div class="flex flex-row justify-center">

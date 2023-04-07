@@ -10,7 +10,7 @@
     export let initWidth: number;
     export let initHeight: number;
 
-    export let bgPhotos: FileList;
+    export let bgPhotos: File[];
     export let bgImageSize: String;
     export let bgColor: String;
     export let bgInterval: number;
@@ -65,7 +65,7 @@
 
 <div style="width:0; height:0" bind:this={component}/>
 <div class="flex relative items-center justify-center" style={`width:${initWidth}vh;height:${initHeight}vh;background-color:${bgColor};`} bind:clientWidth={width} bind:clientHeight={height}>
-    {#if bgPhotos}
+    {#if bgPhotos && bgPhotos.length > 0}
         <img class="w-full h-full" style={`object-fit:${bgImageSize};`} src={URL.createObjectURL(bgPhotos[bgIndex])} alt=""/>
     {/if}
     <Bounce

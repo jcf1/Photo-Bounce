@@ -5,7 +5,7 @@
     import AdvancedSettings from './settings/AdvancedSettings.svelte';
 
     // Background Settings
-    export let bgPhotos: FileList;
+    export let bgPhotos: File[];
     export let bgImageSize: string;
     export let bgColor: string;
     export let bgInterval: number;
