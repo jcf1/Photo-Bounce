@@ -4,6 +4,8 @@
     export let fgImageSize: string = "contain";
     export let fgColor: string = "#FFFFFF";
     export let fgInterval: number = 10;
+    export let sizeMulti: number = 1.0;
+    export let speedMulti: number = 0.0005;
     
     let transparent: boolean = true;
     let color: string;
@@ -31,12 +33,12 @@
         <div class="text-lg float-left pr-2">Change Foreground Image:</div>
         {#if !bounce}
             <label class="float-left pr-1 text-lg">
-                <input class="border border-black" type="range" max="600" min="1" bind:value={interval}/>
-                {fgInterval} seconds
+                <input class="border border-black" type="number" max="600" min="1" bind:value={interval}/>
+                {fgInterval} seconds (1 - 600)
             </label>
         {/if}
         <label class="text-lg float-left pl-1">
-            <input class="float-left" type="checkbox" bind:checked={bounce}/>
+            <input type="checkbox" bind:checked={bounce}/>
             On Bounce
         </label>
     </div>
@@ -45,22 +47,47 @@
         <div class="text-lg float-left pr-2">Display Foreground Image:</div>
         <label class="float-left pr-2">
             <input class="border border-black" type=radio value={"cover"} bind:group={fgImageSize}/>
-            Fill Screen
+            Fill Container
         </label>
         <label class=" float-left pr-2">
             <input class="border border-black" type=radio value={"contain"} bind:group={fgImageSize}/>
-            Fit To Screen
+            Fit To Container
         </label>
-        {#if fgImageSize == "contain"}
+    </div>
+    {#if fgImageSize == "contain"}
+        <div class="flex flex-row justify-center">
             <label class="float-left">
                 Background Color:
                 <label>
                     <input type="checkbox" bind:checked={transparent}/>
                     Transparent
                 </label>
-                or
-                <input type="color" bind:value={color}/>
+                {#if !transparent}
+                    or
+                    <input type="color" bind:value={color}/>
+                {/if}
             </label>
-        {/if}
+        </div>
+    {/if}
+
+    <div class="flex flex-row justify-center">
+        <label class="float-left">
+            Size Multiplier:
+            <label>
+                <input class="border border-black" type="range" max="2.0" min="0.25" step="0.01" bind:value={sizeMulti}/>
+                {sizeMulti.toFixed(2)}
+            </label>
+        </label>
     </div>
+
+    <div class="flex flex-row justify-center">
+        <label class="float-left">
+            Speed:
+            <label>
+                <input class="border border-black" type="range" max="0.0015" min="0.0001" step="0.0001" bind:value={speedMulti}/>
+                {speedMulti.toFixed(2)}
+            </label>
+        </label>
+    </div>
+
 </div>

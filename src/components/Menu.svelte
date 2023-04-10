@@ -15,6 +15,14 @@
     export let fgImageSize: string;
     export let fgColor: string;
     export let fgInterval: number;
+    export let sizeMulti: number;
+    export let speedMulti: number;
+
+    // Advanced Settings
+    export let startX: number;
+    export let startY: number;
+    export let startDir: number;
+    export let bounceAngle: number;
 
 </script>
   
@@ -35,11 +43,18 @@
             bind:fgImageSize={fgImageSize}
             bind:fgColor={fgColor}
             bind:fgInterval={fgInterval}
+            bind:sizeMulti={sizeMulti}
+            bind:speedMulti={speedMulti}
         />
     </TabItem>
     <TabItem>
         <span slot="title">Advanced</span>
-        <AdvancedSettings/>
+        <AdvancedSettings
+            bind:startX={startX}
+            bind:startY={startY}
+            bind:startDir={startDir}
+            bind:bounceAngle={bounceAngle}
+        />
     </TabItem>
 </Tabs>
 

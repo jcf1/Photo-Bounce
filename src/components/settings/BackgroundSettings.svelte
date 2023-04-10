@@ -45,8 +45,8 @@
         <div class="text-lg">Change Background Image:</div>
         {#if !bounce}
             <label class="pr-1 text-lg">
-                <input class="border border-black" type="range" max="600" min="1" bind:value={interval}/>
-                {bgInterval} seconds
+                Every {bgInterval} seconds (1 - 600):
+                <input class="border border-black" type="number" max="600" min="1" bind:value={interval}/>
             </label>
         {/if}
         <label class="text-lg pl-1">

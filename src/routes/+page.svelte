@@ -15,6 +15,14 @@
     let fgImageSize: string;
     let fgColor: string;
     let fgInterval: number;
+    let sizeMulti: number;
+    let speedMulti: number;
+
+    // Advanced Settings
+    let startX: number;
+    let startY: number;
+    let startDir: number;
+    let bounceAngle: number;
 
     function handleKeydown(event: KeyboardEvent) {
 		if(event.code == "Space") {
@@ -28,8 +36,8 @@
     <div class="text-6xl">Photo Bounce</div>
     <PhotoBounce 
         bind:this={photobounce}
-        initWidth={64}
-        initHeight={36}
+        initWidth={32}
+        initHeight={32}
 
         {bgPhotos}
         {bgImageSize}
@@ -40,6 +48,13 @@
         {fgImageSize}
         {fgColor}
         {fgInterval}
+        {sizeMulti}
+        {speedMulti}
+
+        {startX}
+        {startY}
+        {startDir}
+        {bounceAngle}
     />
 
     <Menu
@@ -52,6 +67,13 @@
         bind:fgImageSize={fgImageSize}
         bind:fgColor={fgColor}
         bind:fgInterval={fgInterval}
+        bind:sizeMulti={sizeMulti}
+        bind:speedMulti={speedMulti}
+
+        bind:startX={startX}
+        bind:startY={startY}
+        bind:startDir={startDir}
+        bind:bounceAngle={bounceAngle}
     />
 
     <button class="bg-red-600" on:click={()=> {photobounce.requestFullscreen();}} type=submit>Fullscreen</button>

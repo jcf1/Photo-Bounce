@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount, onDestroy } from "svelte";
+    import { onMount } from "svelte";
 
     export let parentWidth: number;
     export let parentHeight: number;
@@ -8,8 +8,13 @@
     export let fgImageSize: String;
     export let fgColor: String;
     export let fgInterval: number;
+    export let sizeMulti: number;
+    export let speedMulti: number;
 
-    export let sizeMulti: number = 0.25;
+    export let startX: number;
+    export let startY: number;
+    export let startDir: number;
+    export let bounceAngle: number;
 
     interface Position {
         x: number,
@@ -19,9 +24,10 @@
     let element: HTMLElement;
     let currImage: HTMLImageElement;
 
-    let size: number = 10;
-    let xSpeed: number = 0.0003;
-    let ySpeed: number = 0.0003;
+    let xSpeed: number = 0;
+    let ySpeed: number = 0;
+    let currDir: number = 0;
+    let size: number  = 0;
     let pos: Position = {
         x: 0,
         y: 0
@@ -32,27 +38,39 @@
     let fgIndex = 0;
 
     let interval: number;
+    let moveInterval: number;
     $: if(fgPhotos && fgInterval > 0) {
-        clearInterval(interval)
-        interval = setInterval(nextFGPhoto, fgInterval * 1000)
+        clearInterval(interval);
+        interval = setInterval(nextFGPhoto, fgInterval * 1000);
     } else {
-        clearInterval(interval)
+        clearInterval(interval);
     }
 
-    onMount(() => {
-        size = sizeMulti * (parentWidth > parentHeight ? parentWidth : parentHeight);
-        pos = {
-            x: parentWidth / 2,
-            y: parentHeight / 2
+    $: if(speedMulti) {
+            xSpeed = speedMulti * Math.cos(startDir * (Math.PI / 180));
+            ySpeed = speedMulti * Math.sin(startDir * (Math.PI / 180));
+            currDir = startDir;
+            clearInterval(moveInterval);
+            moveInterval = setInterval(move, 1);
         }
-        setInterval(move, 1);
+
+    onMount(() => {
+        size = 0.2 * sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
+        pos = {
+            x: (startX * (parentWidth / 100)) - (size / 2),
+            y: startY * (parentHeight / 100) - (size / 2)
+        }
+        xSpeed = speedMulti * Math.cos(startDir* (Math.PI / 180));
+        ySpeed = speedMulti * Math.sin(startDir* (Math.PI / 180));
+        currDir = startDir;
+        moveInterval = setInterval(move, 1);
     });
 
     export function reset(): void {
         if(element.parentElement) {
             parentWidth = element.parentElement.clientWidth;
             parentHeight = element.parentElement.clientHeight;
-            size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
+            let size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
             pos = {
                 x: parentWidth / 2,
                 y: parentHeight / 2
@@ -73,7 +91,6 @@
     function move() {
         let x = pos.x;
         let y = pos.y;
-        size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
         let width = size;
         let height = size;
         let xBuffer = 0;
