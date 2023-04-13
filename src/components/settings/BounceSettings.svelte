@@ -7,7 +7,7 @@
     export let sizeMulti: number = 1.0;
     export let speedMulti: number = 0.0005;
     
-    let transparent: boolean = true;
+    let transparent: boolean = false;
     let color: string;
     let interval: number = 10;
     let bounce: boolean = true;

@@ -16,22 +16,19 @@
     export let startDir: number;
     export let bounceAngle: number;
 
-    interface Position {
-        x: number,
-        y: number
-    }
-
     let element: HTMLElement;
     let currImage: HTMLImageElement;
 
+    let xPos: number = 0;
     let xSpeed: number = 0;
+    let xBuffer: number = 0;
+
+    let yPos: number = 0;
     let ySpeed: number = 0;
+    let yBuffer: number = 0;
+
     let currDir: number = 0;
     let size: number  = 0;
-    let pos: Position = {
-        x: 0,
-        y: 0
-    };
 
     let bounceStyle: string = `background-color:${fgColor};`;
 
@@ -46,24 +43,22 @@
         clearInterval(interval);
     }
 
-    $: if(speedMulti) {
-            xSpeed = speedMulti * Math.cos(startDir * (Math.PI / 180));
-            ySpeed = speedMulti * Math.sin(startDir * (Math.PI / 180));
-            currDir = startDir;
-            clearInterval(moveInterval);
-            moveInterval = setInterval(move, 1);
-        }
-
     onMount(() => {
         size = 0.2 * sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
-        pos = {
-            x: (startX * (parentWidth / 100)) - (size / 2),
-            y: startY * (parentHeight / 100) - (size / 2)
-        }
-        xSpeed = speedMulti * Math.cos(startDir* (Math.PI / 180));
-        ySpeed = speedMulti * Math.sin(startDir* (Math.PI / 180));
         currDir = startDir;
+        xPos =  (startX * (parentWidth / 100)) - (size / 2);
+        xSpeed = speedMulti * Math.cos(currDir* (Math.PI / 180));
+        yPos =  (startY * (parentHeight / 100)) - (size / 2);
+        ySpeed = speedMulti * Math.sin(currDir* (Math.PI / 180));
         moveInterval = setInterval(move, 1);
+        getImageDimensions();
+        
+        console.log(currDir)
+        console.log(bounceAngle)
+        console.log(xSpeed)
+        console.log(ySpeed)
+        console.log(xBuffer)
+        console.log(yBuffer)
     });
 
     export function reset(): void {
@@ -71,10 +66,8 @@
             parentWidth = element.parentElement.clientWidth;
             parentHeight = element.parentElement.clientHeight;
             let size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
-            pos = {
-                x: parentWidth / 2,
-                y: parentHeight / 2
-            }
+            xPos = parentWidth / 2;
+            yPos = parentHeight / 2;
         }
     }
 
@@ -85,62 +78,95 @@
     function nextFGPhoto(): void {
         if(fgPhotos) {
             fgIndex = (fgIndex + 1) % fgPhotos.length;
+            getImageDimensions();
         }
     }
 
-    function move() {
-        let x = pos.x;
-        let y = pos.y;
-        let width = size;
-        let height = size;
-        let xBuffer = 0;
-        let yBuffer = 0;
-
-        //Get image dimentions if transparent background is chosen to get accurate screen bounces
+    //Get image dimentions if transparent background is chosen to get accurate screen bounces
+    function getImageDimensions() {
+        xBuffer = 0;
+        yBuffer = 0;
         if((fgImageSize === "contain") && (fgColor === "#00000000")) {
             if(currImage !== undefined) {
                 let imgWidth: number = currImage.naturalWidth;
                 let imgHeight: number = currImage.naturalHeight;
                 if(imgWidth > imgHeight) {
-                    height = (parseFloat(imgHeight.toFixed(1)) / parseFloat(imgWidth.toFixed(1))) * size;
+                    let height = (parseFloat(imgHeight.toFixed(1)) / parseFloat(imgWidth.toFixed(1))) * size;
                     yBuffer = (size - height) / 2.0;
                 } else {
-                    width = (parseFloat(imgWidth.toFixed(1)) / parseFloat(imgHeight.toFixed(1))) * size;
+                    let width = (parseFloat(imgWidth.toFixed(1)) / parseFloat(imgHeight.toFixed(1))) * size;
                     xBuffer = (size - width) / 2.0;
                 }
             }
         }
-        
-        if((x >= (parentWidth - (width + xBuffer)) && (xSpeed > 0.0)) || ((x <= ((-1) * xBuffer)) && (xSpeed < 0.0))) {
+    }
+
+    const move = () => {
+        let x = xPos;
+        let y = yPos;
+
+        getImageDimensions();
+
+        if(x >= (parentWidth - (size + xBuffer)) && (xSpeed > 0.0)) {
             if(fgInterval === 0) {
                 nextFGPhoto();
             }
-            x = x + ((xSpeed * parentWidth) * (-1));
-            xSpeed *= (-1);
-        } else {
-            x = x + (xSpeed * parentWidth)
+            if(currDir >= 270) {
+                currDir = (currDir - bounceAngle);
+            } else {
+                currDir = (currDir + bounceAngle) % 360;
+            }
+            xSpeed = speedMulti * Math.cos(currDir * (Math.PI / 180));
+            ySpeed = speedMulti * Math.sin(currDir * (Math.PI / 180));
+        } else if((x <= ((-1) * xBuffer)) && (xSpeed < 0.0)) {
+            if(fgInterval === 0) {
+                nextFGPhoto();
+            }
+            if(currDir >= 180) {
+                currDir = (currDir + bounceAngle);
+            } else {
+                currDir = (currDir - bounceAngle);
+            }
+            xSpeed = speedMulti * Math.cos(currDir * (Math.PI / 180));
+            ySpeed = speedMulti * Math.sin(currDir * (Math.PI / 180));
+        } else{
+            x = x + (xSpeed * parentWidth);
         }
 
-        if((y >= (parentHeight - (height + yBuffer)) && (ySpeed > 0.0)) || ((y <= ((-1) * yBuffer)) && (ySpeed < 0.0))) {
+        if(y >= (parentHeight - (size + yBuffer)) && (ySpeed > 0.0)) {
             if(fgInterval === 0) {
                 nextFGPhoto();
             }
-            y = y + ((ySpeed * parentHeight) * (-1));
-            ySpeed *= (-1);
-        } else {
-            y = y + (ySpeed * parentHeight)
+            if(currDir <= 90) {
+                currDir = ((currDir - bounceAngle) + 360) % 360;
+            } else {
+                currDir = (currDir + bounceAngle) % 360;
+            }
+            xSpeed = speedMulti * Math.cos(currDir * (Math.PI / 180));
+            ySpeed = speedMulti * Math.sin(currDir * (Math.PI / 180));
+        } else if((y <= ((-1) * yBuffer)) && (ySpeed < 0.0)){
+            if(fgInterval === 0) {
+                nextFGPhoto();
+            }
+            if(currDir >= 270) {
+                currDir = (currDir + bounceAngle) % 360;
+            } else {
+                currDir = (currDir - bounceAngle);
+            }
+            xSpeed = speedMulti * Math.cos(currDir * (Math.PI / 180));
+            ySpeed = speedMulti * Math.sin(currDir * (Math.PI / 180));
+        } else{
+            y = y + (ySpeed * parentHeight);
         }
 
         x = (x < ((-1) * xBuffer)) ? ((-1) * xBuffer) : x;
-        x = (x > (parentWidth - (width + xBuffer))) ? (parentWidth - (width + xBuffer)) : x;
+        x = (x > (parentWidth - (size + xBuffer))) ? (parentWidth - (size + xBuffer)) : x;
 
-        y = (y > (parentHeight - (height + yBuffer))) ? (parentHeight - (height + yBuffer)) : y;
+        y = (y > (parentHeight - (size + yBuffer))) ? (parentHeight - (size + yBuffer)) : y;
         y = (y < ((-1) * yBuffer)) ? ((-1) * yBuffer) : y;
 
-        pos = {
-            x: x,
-            y: y
-        };
+        xPos = x;
+        yPos = y;
 
         bounceStyle = `width:${size}px;height:${size}px;top:${y}px;left:${x}px;background-color:${fgColor};`
     }

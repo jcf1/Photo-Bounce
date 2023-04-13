@@ -31,7 +31,7 @@
     <div class="flex flex-row justify-center">
         <label class="pr-1 text-lg">
             Bounce angle on wall collisions is {bounceAngle}&#176;:
-            <input class="border border-black" type="range" max="180" min="0" bind:value={bounceAngle}/>
+            <input class="border border-black" type="range" max="150" min="30" bind:value={bounceAngle}/>
         </label>
     </div>
 </div>

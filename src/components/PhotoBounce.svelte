@@ -20,11 +20,11 @@
     export let fgColor: String = "#FFFFFF";
     export let fgInterval: number = 0;
     export let sizeMulti: number = 1.0;
-    export let speedMulti: number = 0.0005;
+    export let speedMulti: number = 0.001;
 
     export let startX: number = 50;
     export let startY: number = 50;
-    export let startDir: number = 315;
+    export let startDir: number = 300;
     export let bounceAngle: number = 90;
 
     let width: number;
