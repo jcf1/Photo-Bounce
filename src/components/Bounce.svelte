@@ -34,20 +34,16 @@
 
     let bounceStyle: string = `background-color:${fgColor};`;
 
-    let fgIndex = 0;
+    let fgIndex: number = 0;
 
     let interval: number;
     let moveInterval: number;
-    $: if(fgPhotos && fgInterval > 0) {
-        clearInterval(interval);
-        interval = setInterval(nextFGPhoto, fgInterval * 1000);
-    } else {
-        clearInterval(interval);
-    }
 
+    let mounted: boolean = false;
     onMount(() => {
+        mounted = true;
         fgIndex = 0;
-        size = 0.2 * sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
+        size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
         currDir = startDir;
         xPos =  (startX * (parentWidth / 100)) - (size / 2);
         xSpeed = speedMulti * Math.cos(currDir* (Math.PI / 180));
@@ -56,25 +52,30 @@
         moveInterval = setInterval(move, 1);
     });
 
+    $: if(mounted) {
+        if(speedMulti) {
+            xSpeed = speedMulti * Math.cos(currDir* (Math.PI / 180));
+            ySpeed = speedMulti * Math.sin(currDir* (Math.PI / 180));
+        }
+        if(sizeMulti) {
+            size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
+        }
+    }
+
     export function reset(): void {
         fgIndex = 0;
-        size = 0.2 * sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
+        size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
         currDir = startDir;
         xPos =  (startX * (parentWidth / 100)) - (size / 2);
         xSpeed = speedMulti * Math.cos(currDir* (Math.PI / 180));
         yPos =  (startY * (parentHeight / 100)) - (size / 2);
         ySpeed = speedMulti * Math.sin(currDir* (Math.PI / 180));
-
         if(fgPhotos && fgInterval > 0) {
             clearInterval(interval);
             interval = setInterval(nextFGPhoto, fgInterval * 1000);
         } else {
             clearInterval(interval);
         }
-        if(moveInterval) {
-            clearInterval(interval);
-        }
-        moveInterval = setInterval(move, 1);
     }
 
     function nextFGPhoto(): void {
@@ -106,7 +107,6 @@
         let x = xPos;
         let y = yPos;
         getImageDimensions();
-
         if(x > (parentWidth - (size - xBuffer))) {
             x = parentWidth - (size - xBuffer);
         } else if(x <= ((-1) * xBuffer)) {

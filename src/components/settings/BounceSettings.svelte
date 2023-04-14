@@ -4,8 +4,8 @@
     export let fgImageSize: string = "contain";
     export let fgColor: string = "#FFFFFF";
     export let fgInterval: number = 10;
-    export let sizeMulti: number = 1.0;
-    export let speedMulti: number = 0.0005;
+    export let sizeMulti: number = 0.2;
+    export let speedMulti: number = 0.0015;
     
     let transparent: boolean = false;
     let color: string;
@@ -74,7 +74,7 @@
         <label class="float-left">
             Size Multiplier:
             <label>
-                <input class="border border-black" type="range" max="2.0" min="0.25" step="0.01" bind:value={sizeMulti}/>
+                <input class="border border-black" type="range" max="0.5" min="0.05" step="0.01" bind:value={sizeMulti}/>
                 {sizeMulti.toFixed(2)}
             </label>
         </label>
@@ -84,7 +84,7 @@
         <label class="float-left">
             Speed:
             <label>
-                <input class="border border-black" type="range" max="0.001" min="0.0001" step="0.0001" bind:value={speedMulti}/>
+                <input class="border border-black" type="range" max="0.01" min="0.0001" step="0.0001" bind:value={speedMulti}/>
                 {speedMulti.toFixed(4)}
             </label>
         </label>

@@ -22,8 +22,8 @@
     export let fgImageSize: String = "contain";
     export let fgColor: String = "#FFFFFF";
     export let fgInterval: number = 0;
-    export let sizeMulti: number = 1.0;
-    export let speedMulti: number = 0.001;
+    export let sizeMulti: number = 0.2;
+    export let speedMulti: number = 0.0015;
 
     export let startX: number = 50;
     export let startY: number = 50;
@@ -35,18 +35,18 @@
     let bgIndex = 0;
 
     let clear: number;
-    $: if(bgPhotos && bgInterval > 0) {
-        clearInterval(clear)
-        clear = setInterval(nextBGPhoto, bgInterval * 1000)
-    } else {
-        clearInterval(clear)
+
+    let mounted = false;
+    $: if(mounted && ((bgPhotos && bgPhotos.length > 0) || (fgPhotos && fgPhotos.length > 0) || startX || startY || startDir || bounceAngle)) {
+        reset();
     }
 
     onMount(() => {
-      if (screenfull.isEnabled) {
-        screenfull.on("change", () => dispatch("change"));
-        screenfull.on("error", () => dispatch("error"));
-      }
+        mounted = true;
+        if (screenfull.isEnabled) {
+            screenfull.on("change", () => dispatch("change"));
+            screenfull.on("error", () => dispatch("error"));
+        }
     });
 
     function reset() {
