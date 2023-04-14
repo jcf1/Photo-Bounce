@@ -41,6 +41,8 @@
 		"screenfull": "^6.0.2",
 		"svelte-dragdroplist": "^1.1.1",
 		"svelte-grid": "^5.1.1",
-		"svelte-sortable-list": "^1.1.0"
+		"svelte-resize-observer-action": "^0.0.2",
+		"svelte-sortable-list": "^1.1.0",
+		"svelte-watch-resize": "^1.0.3"
 	}
 }

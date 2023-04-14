@@ -1,11 +1,14 @@
 <script lang="ts">
     import { onMount, onDestroy, createEventDispatcher } from "svelte";
+    import { resize } from 'svelte-resize-observer-action';
     import screenfull from "screenfull";
     import Bounce from "./Bounce.svelte";
 
     // Variables to make PhotoBounce fullscreen
     let component: HTMLElement;
     const dispatch = createEventDispatcher<{ change: never; error: never }>();
+
+    let bounceComponent: Bounce;
 
     export let initWidth: number = 25;
     export let initHeight: number = 25;
@@ -46,6 +49,25 @@
       }
     });
 
+    function reset() {
+        bounceComponent.reset();
+        bgIndex = 0;
+        if(bgPhotos && bgInterval > 0) {
+            clearInterval(clear)
+            clear = setInterval(nextBGPhoto, bgInterval * 1000)
+        } else {
+            clearInterval(clear)
+        }
+    }
+
+    function nextBGPhoto(): void {
+        if(bgPhotos && bgPhotos.length > 0) {
+            bgIndex = (bgIndex + 1) % bgPhotos.length;
+            console.log('HERE');
+            console.log(bgIndex);
+        }
+    }
+
     onDestroy(() => {
       if (screenfull.isEnabled) {
         screenfull.off("change", () => true);
@@ -64,18 +86,18 @@
             screenfull.exit();
         }
     }
-
-    function nextBGPhoto(): void {
-        bgIndex = (bgIndex + 1) % bgPhotos.length;
-    }
 </script>
 
 <div style="width:0; height:0" bind:this={component}/>
-<div class="flex relative items-center justify-center" style={`width:${initWidth}vw;height:${initHeight}vh;background-color:${bgColor};`} bind:clientWidth={width} bind:clientHeight={height}>
+<div class="flex relative items-center justify-center" style={`width:${initWidth}vw;height:${initHeight}vh;background-color:${bgColor};`} bind:clientWidth={width} bind:clientHeight={height} use:resize={reset}>
     {#if bgPhotos && bgPhotos.length > 0}
         <img class="w-full h-full" style={`object-fit:${bgImageSize};`} src={URL.createObjectURL(bgPhotos[bgIndex])} alt=""/>
     {/if}
     <Bounce
+        bind:this={bounceComponent}
+
+        nextBGPhoto={(bgPhotos && bgPhotos.length > 0 && bgInterval === 0) ? nextBGPhoto : () => {}}
+
         parentWidth={width}
         parentHeight={height}
 

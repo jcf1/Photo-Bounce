@@ -1,6 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
+    export let nextBGPhoto: () => void;
+
     export let parentWidth: number;
     export let parentHeight: number;
 
@@ -44,6 +46,7 @@
     }
 
     onMount(() => {
+        fgIndex = 0;
         size = 0.2 * sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
         currDir = startDir;
         xPos =  (startX * (parentWidth / 100)) - (size / 2);
@@ -54,21 +57,28 @@
     });
 
     export function reset(): void {
-        if(element.parentElement) {
-            parentWidth = element.parentElement.clientWidth;
-            parentHeight = element.parentElement.clientHeight;
-            size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
-            xPos = parentWidth / 2;
-            yPos = parentHeight / 2;
-        }
-    }
+        fgIndex = 0;
+        size = 0.2 * sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
+        currDir = startDir;
+        xPos =  (startX * (parentWidth / 100)) - (size / 2);
+        xSpeed = speedMulti * Math.cos(currDir* (Math.PI / 180));
+        yPos =  (startY * (parentHeight / 100)) - (size / 2);
+        ySpeed = speedMulti * Math.sin(currDir* (Math.PI / 180));
 
-    export function clear(): void {
-        reset();
+        if(fgPhotos && fgInterval > 0) {
+            clearInterval(interval);
+            interval = setInterval(nextFGPhoto, fgInterval * 1000);
+        } else {
+            clearInterval(interval);
+        }
+        if(moveInterval) {
+            clearInterval(interval);
+        }
+        moveInterval = setInterval(move, 1);
     }
 
     function nextFGPhoto(): void {
-        if(fgPhotos) {
+        if(fgPhotos && fgPhotos.length > 0) {
             fgIndex = (fgIndex + 1) % fgPhotos.length;
         }
     }
@@ -109,11 +119,14 @@
         }
 
         if(x >= (parentWidth - (size - xBuffer)) && (xSpeed > 0.0)) {
+            nextBGPhoto();
             if(fgInterval === 0) {
                 nextFGPhoto();
             }
-            if(currDir >= 270) {
+            if(currDir > 270) {
                 currDir = (currDir - bounceAngle);
+            } else if(currDir === 270) {
+                currDir = Math.floor(Math.random() * 2) == 0 ? (currDir - bounceAngle) : (currDir + bounceAngle) % 360;
             } else {
                 currDir = (currDir + bounceAngle) % 360;
             }
@@ -121,46 +134,56 @@
             xSpeed = speedMulti * Math.cos(currDir * (Math.PI / 180));
             ySpeed = speedMulti * Math.sin(currDir * (Math.PI / 180));
         } else if((x <= ((-1) * xBuffer)) && (xSpeed < 0.0)) {
+            nextBGPhoto();
             if(fgInterval === 0) {
                 nextFGPhoto();
             }
-            if(currDir >= 180) {
+            if(currDir > 180) {
                 currDir = (currDir + bounceAngle);
+            } else if(currDir == 180) {
+                currDir = Math.floor(Math.random() * 2) == 0 ? (currDir + bounceAngle) : (currDir - bounceAngle);
             } else {
                 currDir = (currDir - bounceAngle);
             }
             xSpeed = speedMulti * Math.cos(currDir * (Math.PI / 180));
             ySpeed = speedMulti * Math.sin(currDir * (Math.PI / 180));
         }
-        x = x + (xSpeed * parentWidth);
 
         if(y >= (parentHeight - (size - yBuffer)) && (ySpeed > 0.0)) {
+            nextBGPhoto();
             if(fgInterval === 0) {
                 nextFGPhoto();
             }
-            if(currDir <= 90) {
+            if(currDir < 90) {
                 currDir = ((currDir - bounceAngle) + 360) % 360;
+            } else if(currDir === 90) {
+                currDir = Math.floor(Math.random() * 2) == 0 ? ((currDir - bounceAngle) + 360) % 360 : (currDir + bounceAngle) % 360;
             } else {
                 currDir = (currDir + bounceAngle) % 360;
             }
             xSpeed = speedMulti * Math.cos(currDir * (Math.PI / 180));
             ySpeed = speedMulti * Math.sin(currDir * (Math.PI / 180));
         } else if((y <= ((-1) * yBuffer)) && (ySpeed < 0.0)){
+            nextBGPhoto();
             if(fgInterval === 0) {
                 nextFGPhoto();
             }
-            if(currDir >= 270) {
+            
+            if(currDir > 270) {
                 currDir = (currDir + bounceAngle) % 360;
+            } else if(currDir === 270) {
+                currDir = Math.floor(Math.random() * 2) == 0 ? (currDir + bounceAngle) % 360 : (currDir - bounceAngle);
             } else {
                 currDir = (currDir - bounceAngle);
             }
             xSpeed = speedMulti * Math.cos(currDir * (Math.PI / 180));
             ySpeed = speedMulti * Math.sin(currDir * (Math.PI / 180));
         }
+
+        x = x + (xSpeed * parentWidth);
         y = y + (ySpeed * parentHeight);
         xPos = x;
         yPos = y;
-
         bounceStyle = `width:${size}px;height:${size}px;top:${y}px;left:${x}px;background-color:${fgColor};`
     }
 </script>

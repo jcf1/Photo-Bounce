@@ -84,8 +84,8 @@
         <label class="float-left">
             Speed:
             <label>
-                <input class="border border-black" type="range" max="0.0015" min="0.0001" step="0.0001" bind:value={speedMulti}/>
-                {speedMulti.toFixed(2)}
+                <input class="border border-black" type="range" max="0.001" min="0.0001" step="0.0001" bind:value={speedMulti}/>
+                {speedMulti.toFixed(4)}
             </label>
         </label>
     </div>
