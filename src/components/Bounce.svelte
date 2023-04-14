@@ -51,21 +51,13 @@
         yPos =  (startY * (parentHeight / 100)) - (size / 2);
         ySpeed = speedMulti * Math.sin(currDir* (Math.PI / 180));
         moveInterval = setInterval(move, 1);
-        getImageDimensions();
-        
-        console.log(currDir)
-        console.log(bounceAngle)
-        console.log(xSpeed)
-        console.log(ySpeed)
-        console.log(xBuffer)
-        console.log(yBuffer)
     });
 
     export function reset(): void {
         if(element.parentElement) {
             parentWidth = element.parentElement.clientWidth;
             parentHeight = element.parentElement.clientHeight;
-            let size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
+            size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
             xPos = parentWidth / 2;
             yPos = parentHeight / 2;
         }
@@ -78,7 +70,6 @@
     function nextFGPhoto(): void {
         if(fgPhotos) {
             fgIndex = (fgIndex + 1) % fgPhotos.length;
-            getImageDimensions();
         }
     }
 
@@ -104,10 +95,20 @@
     const move = () => {
         let x = xPos;
         let y = yPos;
-
         getImageDimensions();
 
-        if(x >= (parentWidth - (size + xBuffer)) && (xSpeed > 0.0)) {
+        if(x > (parentWidth - (size - xBuffer))) {
+            x = parentWidth - (size - xBuffer);
+        } else if(x <= ((-1) * xBuffer)) {
+            x = (-1) * xBuffer;
+        }
+        if(y > (parentHeight - (size - yBuffer))) {
+            y = parentHeight - (size - yBuffer);
+        } else if(y <= ((-1) * yBuffer)) {
+            y = (-1) * yBuffer;
+        }
+
+        if(x >= (parentWidth - (size - xBuffer)) && (xSpeed > 0.0)) {
             if(fgInterval === 0) {
                 nextFGPhoto();
             }
@@ -116,6 +117,7 @@
             } else {
                 currDir = (currDir + bounceAngle) % 360;
             }
+
             xSpeed = speedMulti * Math.cos(currDir * (Math.PI / 180));
             ySpeed = speedMulti * Math.sin(currDir * (Math.PI / 180));
         } else if((x <= ((-1) * xBuffer)) && (xSpeed < 0.0)) {
@@ -129,11 +131,10 @@
             }
             xSpeed = speedMulti * Math.cos(currDir * (Math.PI / 180));
             ySpeed = speedMulti * Math.sin(currDir * (Math.PI / 180));
-        } else{
-            x = x + (xSpeed * parentWidth);
         }
+        x = x + (xSpeed * parentWidth);
 
-        if(y >= (parentHeight - (size + yBuffer)) && (ySpeed > 0.0)) {
+        if(y >= (parentHeight - (size - yBuffer)) && (ySpeed > 0.0)) {
             if(fgInterval === 0) {
                 nextFGPhoto();
             }
@@ -155,16 +156,8 @@
             }
             xSpeed = speedMulti * Math.cos(currDir * (Math.PI / 180));
             ySpeed = speedMulti * Math.sin(currDir * (Math.PI / 180));
-        } else{
-            y = y + (ySpeed * parentHeight);
         }
-
-        x = (x < ((-1) * xBuffer)) ? ((-1) * xBuffer) : x;
-        x = (x > (parentWidth - (size + xBuffer))) ? (parentWidth - (size + xBuffer)) : x;
-
-        y = (y > (parentHeight - (size + yBuffer))) ? (parentHeight - (size + yBuffer)) : y;
-        y = (y < ((-1) * yBuffer)) ? ((-1) * yBuffer) : y;
-
+        y = y + (ySpeed * parentHeight);
         xPos = x;
         yPos = y;
 
