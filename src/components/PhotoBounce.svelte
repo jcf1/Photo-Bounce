@@ -20,10 +20,10 @@
 
     export let fgPhotos: FileList;
     export let fgImageSize: String = "contain";
-    export let fgColor: String = "#FFFFFF";
+    export let fgColor: String = "#00000000";
     export let fgInterval: number = 0;
-    export let sizeMulti: number = 0.2;
-    export let speedMulti: number = 0.0015;
+    export let sizeMulti: number = 0.4;
+    export let speedMulti: number = 0.001;
 
     export let startX: number = 50;
     export let startY: number = 50;

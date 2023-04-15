@@ -33,11 +33,10 @@
 
 <svelte:window on:keydown={(event) => handleKeydown(event)}/>
 <div class="grid gap-1 justify-center justify-items-center items-center h-screen w-screen">
-    <div class="text-6xl">Photo Bounce</div>
     <PhotoBounce 
         bind:this={photobounce}
-        initWidth={32}
-        initHeight={32}
+        initWidth={40}
+        initHeight={40}
 
         {bgPhotos}
         {bgImageSize}

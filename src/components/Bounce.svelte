@@ -20,6 +20,10 @@
 
     let element: HTMLElement;
     let currImage: HTMLImageElement;
+    let prevImage: string = '';
+
+    let logos: string[] = ["/images/Red_PhotoBounce.png","/images/Blue_PhotoBounce.png","/images/Orange_PhotoBounce.png","/images/Magenta_PhotoBounce.png","/images/Purple_PhotoBounce.png"]
+    let logoIndex: number = 0;
 
     let xPos: number = 0;
     let xSpeed: number = 0;
@@ -49,6 +53,7 @@
         xSpeed = speedMulti * Math.cos(currDir* (Math.PI / 180));
         yPos =  (startY * (parentHeight / 100)) - (size / 2);
         ySpeed = speedMulti * Math.sin(currDir* (Math.PI / 180));
+        getImageDimensions()
         moveInterval = setInterval(move, 1);
     });
 
@@ -81,6 +86,8 @@
     function nextFGPhoto(): void {
         if(fgPhotos && fgPhotos.length > 0) {
             fgIndex = (fgIndex + 1) % fgPhotos.length;
+        } else {
+            logoIndex = (logoIndex + 1) % logos.length;
         }
     }
 
@@ -106,16 +113,18 @@
     const move = () => {
         let x = xPos;
         let y = yPos;
-        getImageDimensions();
-        if(x > (parentWidth - (size - xBuffer))) {
-            x = parentWidth - (size - xBuffer);
-        } else if(x <= ((-1) * xBuffer)) {
-            x = (-1) * xBuffer;
-        }
-        if(y > (parentHeight - (size - yBuffer))) {
-            y = parentHeight - (size - yBuffer);
-        } else if(y <= ((-1) * yBuffer)) {
-            y = (-1) * yBuffer;
+
+        if((fgImageSize === "contain") && (fgColor === "#00000000") && (xBuffer !=0 || yBuffer != 0)) {
+            if(x > (parentWidth - (size - xBuffer))) {
+                x = parentWidth - (size - xBuffer);
+            } else if(x <= ((-1) * xBuffer)) {
+                x = (-1) * xBuffer;
+            }
+            if(y > (parentHeight - (size - yBuffer))) {
+                y = parentHeight - (size - yBuffer);
+            } else if(y <= ((-1) * yBuffer)) {
+                y = (-1) * yBuffer;
+            }
         }
 
         if(x >= (parentWidth - (size - xBuffer)) && (xSpeed > 0.0)) {
@@ -190,7 +199,9 @@
 
 <div class="absolute items-center text-center flex justify-center" bind:this={element} style={bounceStyle}>
     {#if fgPhotos}
-        <img class="w-full h-full" style={`object-fit:${fgImageSize}`} src={URL.createObjectURL(fgPhotos[fgIndex])} alt="" bind:this={currImage}/>
+        <img class="w-full h-full" style={`object-fit:${fgImageSize}`} src={URL.createObjectURL(fgPhotos[fgIndex])} alt="" bind:this={currImage} on:load={getImageDimensions}/>
+    {:else}
+        <img class="w-full h-full" style={`object-fit:${fgImageSize}`} src={logos[logoIndex]} alt="" bind:this={currImage} on:load={getImageDimensions}/>
     {/if}
 </div>
 

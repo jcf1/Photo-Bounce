@@ -4,10 +4,10 @@
     export let fgImageSize: string = "contain";
     export let fgColor: string = "#FFFFFF";
     export let fgInterval: number = 10;
-    export let sizeMulti: number = 0.2;
-    export let speedMulti: number = 0.0015;
+    export let sizeMulti: number = 0.4;
+    export let speedMulti: number = 0.001;
     
-    let transparent: boolean = false;
+    let transparent: boolean = true;
     let color: string;
     let interval: number = 10;
     let bounce: boolean = true;
