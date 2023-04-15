@@ -6,7 +6,7 @@
     export let parentWidth: number;
     export let parentHeight: number;
 
-    export let fgPhotos: FileList;
+    export let fgPhotos: File[];
     export let fgImageSize: String;
     export let fgColor: String;
     export let fgInterval: number;
@@ -20,7 +20,6 @@
 
     let element: HTMLElement;
     let currImage: HTMLImageElement;
-    let prevImage: string = '';
 
     let logos: string[] = ["/images/Red_PhotoBounce.png","/images/Blue_PhotoBounce.png","/images/Orange_PhotoBounce.png","/images/Magenta_PhotoBounce.png","/images/Purple_PhotoBounce.png"]
     let logoIndex: number = 0;
@@ -53,7 +52,7 @@
         xSpeed = speedMulti * Math.cos(currDir* (Math.PI / 180));
         yPos =  (startY * (parentHeight / 100)) - (size / 2);
         ySpeed = speedMulti * Math.sin(currDir* (Math.PI / 180));
-        getImageDimensions()
+        calculateImageDimensions();
         moveInterval = setInterval(move, 1);
     });
 
@@ -64,11 +63,13 @@
         }
         if(sizeMulti) {
             size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
+            calculateImageDimensions();
         }
     }
 
     export function reset(): void {
         fgIndex = 0;
+        logoIndex = 0;
         size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
         currDir = startDir;
         xPos =  (startX * (parentWidth / 100)) - (size / 2);
@@ -81,6 +82,7 @@
         } else {
             clearInterval(interval);
         }
+        calculateImageDimensions();
     }
 
     function nextFGPhoto(): void {
@@ -92,7 +94,7 @@
     }
 
     //Get image dimentions if transparent background is chosen to get accurate screen bounces
-    function getImageDimensions() {
+    function calculateImageDimensions() {
         xBuffer = 0;
         yBuffer = 0;
         if((fgImageSize === "contain") && (fgColor === "#00000000")) {
@@ -198,10 +200,10 @@
 </script>
 
 <div class="absolute items-center text-center flex justify-center" bind:this={element} style={bounceStyle}>
-    {#if fgPhotos}
-        <img class="w-full h-full" style={`object-fit:${fgImageSize}`} src={URL.createObjectURL(fgPhotos[fgIndex])} alt="" bind:this={currImage} on:load={getImageDimensions}/>
+    {#if fgPhotos && fgPhotos.length > 0}
+        <img class="w-full h-full" style={`object-fit:${fgImageSize}`} src={URL.createObjectURL(fgPhotos[fgIndex])} alt="" bind:this={currImage} on:load={calculateImageDimensions}/>
     {:else}
-        <img class="w-full h-full" style={`object-fit:${fgImageSize}`} src={logos[logoIndex]} alt="" bind:this={currImage} on:load={getImageDimensions}/>
+        <img class="w-full h-full" style={`object-fit:${fgImageSize}`} src={logos[logoIndex]} alt="" bind:this={currImage} on:load={calculateImageDimensions}/>
     {/if}
 </div>
 

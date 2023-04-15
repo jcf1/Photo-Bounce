@@ -1,12 +1,13 @@
 <script lang="ts">
     let fgFileInput: HTMLInputElement;
-    export let fgPhotos: FileList;
-    export let fgImageSize: string = "contain";
-    export let fgColor: string = "#FFFFFF";
-    export let fgInterval: number = 10;
-    export let sizeMulti: number = 0.4;
-    export let speedMulti: number = 0.001;
+    export let fgPhotos: File[];
+    export let fgImageSize: string;
+    export let fgColor: string;
+    export let fgInterval: number;
+    export let sizeMulti: number;
+    export let speedMulti: number;
     
+    let uploads: FileList;
     let transparent: boolean = true;
     let color: string;
     let interval: number = 10;
@@ -14,6 +15,13 @@
 
     $: fgInterval = bounce ? 0 : interval;
     $: fgColor = transparent ? "#00000000" : color;
+    $: if(uploads && uploads.length > 0) {
+        updatePhotos()
+    }
+
+    function updatePhotos() {
+        fgPhotos = fgPhotos.concat(Array.from(uploads));
+    }
 
     function uploadBouncePhotos() {
         fgFileInput.click();
@@ -21,7 +29,7 @@
     }
 </script>
 
-<input class="hidden" accept="image/png, image/jpeg, image/jpg" multiple type="file" bind:this={fgFileInput} bind:files={fgPhotos}/>
+<input class="hidden" accept="image/png, image/jpeg, image/jpg" multiple type="file" bind:this={fgFileInput} bind:files={uploads}/>
 <div class="justify-center">
 
     <label class="flex flex-row justify-center">

@@ -1,8 +1,8 @@
 <script lang="ts">
-    export let startX: number = 50;
-    export let startY: number = 50;
-    export let startDir: number = 60;
-    export let bounceAngle: number = 90;
+    export let startX: number;
+    export let startY: number;
+    export let startDir: number;
+    export let bounceAngle: number;
 </script>
 
 <div class="justify-center">

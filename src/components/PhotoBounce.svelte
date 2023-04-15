@@ -10,25 +10,25 @@
 
     let bounceComponent: Bounce;
 
-    export let initWidth: number = 25;
-    export let initHeight: number = 25;
+    export let initWidth: number;
+    export let initHeight: number;
 
     export let bgPhotos: File[];
-    export let bgImageSize: String = "cover";
-    export let bgColor: String = "#000000";
-    export let bgInterval: number = 10;
+    export let bgImageSize: String;
+    export let bgColor: String;
+    export let bgInterval: number;
 
-    export let fgPhotos: FileList;
-    export let fgImageSize: String = "contain";
-    export let fgColor: String = "#00000000";
-    export let fgInterval: number = 0;
-    export let sizeMulti: number = 0.4;
-    export let speedMulti: number = 0.001;
+    export let fgPhotos: File[];
+    export let fgImageSize: String;
+    export let fgColor: String;
+    export let fgInterval: number;
+    export let sizeMulti: number;
+    export let speedMulti: number;
 
-    export let startX: number = 50;
-    export let startY: number = 50;
-    export let startDir: number = 300;
-    export let bounceAngle: number = 90;
+    export let startX: number;
+    export let startY: number;
+    export let startDir: number;
+    export let bounceAngle: number;
 
     let width: number;
     let height: number;
@@ -36,27 +36,23 @@
 
     let clear: number;
 
-    let mounted = false;
-    $: if(mounted && ((bgPhotos && bgPhotos.length > 0) || (fgPhotos && fgPhotos.length > 0) || startX || startY || startDir || bounceAngle)) {
-        reset();
-    }
+
 
     onMount(() => {
-        mounted = true;
         if (screenfull.isEnabled) {
             screenfull.on("change", () => dispatch("change"));
             screenfull.on("error", () => dispatch("error"));
         }
     });
 
-    function reset() {
+    export function reset() {
         bounceComponent.reset();
         bgIndex = 0;
         if(bgPhotos && bgInterval > 0) {
-            clearInterval(clear)
-            clear = setInterval(nextBGPhoto, bgInterval * 1000)
+            clearInterval(clear);
+            clear = setInterval(nextBGPhoto, bgInterval * 1000);
         } else {
-            clearInterval(clear)
+            clearInterval(clear);
         }
     }
 

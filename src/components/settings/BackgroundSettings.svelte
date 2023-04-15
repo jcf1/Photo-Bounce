@@ -3,12 +3,12 @@
 
     let bgFileInput: HTMLInputElement;
     let uploads: FileList;
-    export let bgPhotos: File[] = [];
+    export let bgPhotos: File[];
 
-    export let bgImageSize: string = "cover";
-    export let bgColor: string = "#000000";
+    export let bgImageSize: string;
+    export let bgColor: string;
 
-    export let bgInterval: number = 10;
+    export let bgInterval: number;
     let interval: number = 10;
     let bounce: boolean = false;
 

@@ -11,7 +11,7 @@
     export let bgInterval: number;
 
     // Foreground (or Bounce) Settings
-    export let fgPhotos: FileList;
+    export let fgPhotos: File[];
     export let fgImageSize: string;
     export let fgColor: string;
     export let fgInterval: number;

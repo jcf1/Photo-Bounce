@@ -5,26 +5,31 @@
     let photobounce: PhotoBounce;
 
     // Background Setings
-    let bgPhotos: File[];
-    let bgImageSize: string;
-    let bgColor: string;
-    let bgInterval: number;
+    let bgPhotos: File[] = [];
+    let bgImageSize: string = "cover";
+    let bgColor: string =  "#000000";
+    let bgInterval: number = 10;
 
     // Foreground (or Bounce) Settings
-    let fgPhotos: FileList;
-    let fgImageSize: string;
-    let fgColor: string;
-    let fgInterval: number;
-    let sizeMulti: number;
-    let speedMulti: number;
+    let fgPhotos: File[] = [];
+    let fgImageSize: string = "contain";
+    let fgColor: string = "#00000000";
+    let fgInterval: number = 0;
+    let sizeMulti: number = 0.4;
+    let speedMulti: number = 0.001;
 
     // Advanced Settings
-    let startX: number;
-    let startY: number;
-    let startDir: number;
-    let bounceAngle: number;
+    let startX: number = 50;
+    let startY: number = 50;
+    let startDir: number = 300;
+    let bounceAngle: number = 90;
 
-    function handleKeydown(event: KeyboardEvent) {
+    function clearPhotos(): void {
+        bgPhotos = [];
+        fgPhotos = [];
+    }
+
+    function handleKeydown(event: KeyboardEvent): void {
 		if(event.code == "Space") {
             photobounce.exitFullscreen();
         }
@@ -75,5 +80,7 @@
         bind:bounceAngle={bounceAngle}
     />
 
-    <button class="bg-red-600" on:click={()=> {photobounce.requestFullscreen();}} type=submit>Fullscreen</button>
+    <button class="bg-red-600" on:click={photobounce.requestFullscreen} type=submit>Fullscreen</button>
+    <button class="bg-red-600" on:click={clearPhotos} type=submit>Clear Photos</button>
+    <button class="bg-red-600" on:click={photobounce.reset} type=submit>Restart</button>
 </div>
