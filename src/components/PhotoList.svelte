@@ -1,63 +1,38 @@
 <script lang="ts">
-    import DragDrop from "svelte-dragdroplist";
-
-    let labelStyle = "width:40px;height:20px"
-    let imgStyle = "width:16vh;height:16vh;objectFit:contain;"
+    import { SortableList } from '@jhubbardsf/svelte-sortablejs';
+    import type { SortableEvent } from 'sortablejs';
 
     export let photolist: File[];
-    let count: number = photolist.length;
-    let list: {idx: number, html: string}[] = photolist.map((f,i) => makeFileObj(f,i));
 
-    
-
-    function makeFileObj(f: File, i: number) {
-        return {
-            "idx": i,
-            "html": `<label style=${labelStyle}><img style=${imgStyle} src="${URL.createObjectURL(f)}" alt=""/>${f.name}</label>`
-        }
-    }
-
-    $: if(count > list.length) {
-            // File was removed from list
-            let remove = -1;
-            for(let i = 0; i < list.length; i++) {
-                if(list[i].idx != i) {
-                    remove = i;
-                    break
+    function handleOnSort(e: SortableEvent) {
+        if(e && e.oldDraggableIndex != undefined && e.newDraggableIndex != undefined) {
+            let oldIdx: number = e.oldDraggableIndex;
+            let newIdx: number = e.newDraggableIndex;
+            let selected: File = photolist[oldIdx];
+            if(oldIdx < newIdx) {
+                for(let i = oldIdx; i < newIdx; i++) {
+                    photolist[i] = photolist[i + 1];
+                }
+            } else{
+                for(let i = oldIdx; i > newIdx; i--) {
+                    photolist[i] = photolist[i - 1];
                 }
             }
-            if(remove != -1) {
-                photolist.splice(remove, 1);
-            }
-            list = photolist.map((f,i) => makeFileObj(f,i));
-            count = list.length;
-        } else if(count < photolist.length) {
-            // Files were added to the list
-            list = photolist.map((f,i) => makeFileObj(f,i));
-            count = photolist.length;
-        } else {
-            // Files were reordered
-            let swap1 = -1;
-            let swap2 = -1;
-            for(let i = 0; i < list.length; i++) {
-                swap2 = list[i].idx;
-                if(swap2 != i) {
-                    swap1 = i;
-                    break
-                }
-            }
-            if(swap1 != -1) {
-                let temp = photolist[swap1];
-                photolist[swap1] = photolist[swap2];
-                photolist[swap2] = temp;
-            }
-            list = photolist.map((f,i) => makeFileObj(f,i));
+            photolist[newIdx] = selected;
         }
-        
+    }   
 </script>
 
-
-<DragDrop
-    bind:data={list}
-    removesItems={true}
-/>
+<div class=" overflow-x-scroll">
+    <SortableList
+        class={'flex'}
+        swapThreshold={0.7}
+        animation={150}
+        direction={'horizontal'}
+        onSort={handleOnSort}
+    >
+    {#each photolist as f (f.name) }
+        <img class=" pr-1 h-20 w-20 object-contain" src={URL.createObjectURL(f)} alt=""/>
+    {/each}
+    </SortableList>
+</div>

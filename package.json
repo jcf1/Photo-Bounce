@@ -12,8 +12,10 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
+		"@jhubbardsf/svelte-sortablejs": "^1.1.0",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
+		"@types/sortablejs": "^1.15.1",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
 		"autoprefixer": "^10.4.7",
@@ -39,6 +41,7 @@
 		"flowbite": "^1.6.4",
 		"flowbite-svelte": "^0.34.2",
 		"screenfull": "^6.0.2",
+		"sortablejs": "^1.15.0",
 		"svelte-dragdroplist": "^1.1.1",
 		"svelte-grid": "^5.1.1",
 		"svelte-resize-observer-action": "^0.0.2",

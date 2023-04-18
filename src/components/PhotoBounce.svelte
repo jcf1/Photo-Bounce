@@ -36,8 +36,6 @@
 
     let clear: number;
 
-
-
     onMount(() => {
         if (screenfull.isEnabled) {
             screenfull.on("change", () => dispatch("change"));
@@ -59,8 +57,6 @@
     function nextBGPhoto(): void {
         if(bgPhotos && bgPhotos.length > 0) {
             bgIndex = (bgIndex + 1) % bgPhotos.length;
-            console.log('HERE');
-            console.log(bgIndex);
         }
     }
 
