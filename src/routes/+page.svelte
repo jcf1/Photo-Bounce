@@ -27,6 +27,7 @@
     function clearPhotos(): void {
         bgPhotos = [];
         fgPhotos = [];
+        photobounce.reset();
     }
 
     function handleKeydown(event: KeyboardEvent): void {
@@ -37,7 +38,7 @@
 </script>
 
 <svelte:window on:keydown={(event) => handleKeydown(event)}/>
-<div class="grid gap-1 justify-center justify-items-center items-center h-screen w-screen">
+<div class="grid gap-1 justify-center justify-items-center items-center h-screen w-screen bg-slate-600">
     <PhotoBounce 
         bind:this={photobounce}
         initWidth={40}
@@ -61,26 +62,30 @@
         {bounceAngle}
     />
 
-    <Menu
-        bind:bgPhotos={bgPhotos}
-        bind:bgImageSize={bgImageSize}
-        bind:bgColor={bgColor}
-        bind:bgInterval={bgInterval}
+    <div class="flex items-center justify-center" style={`width:${60}vw;height:${20}vw;`}>
+        <Menu
+            bind:bgPhotos={bgPhotos}
+            bind:bgImageSize={bgImageSize}
+            bind:bgColor={bgColor}
+            bind:bgInterval={bgInterval}
 
-        bind:fgPhotos={fgPhotos}
-        bind:fgImageSize={fgImageSize}
-        bind:fgColor={fgColor}
-        bind:fgInterval={fgInterval}
-        bind:sizeMulti={sizeMulti}
-        bind:speedMulti={speedMulti}
+            bind:fgPhotos={fgPhotos}
+            bind:fgImageSize={fgImageSize}
+            bind:fgColor={fgColor}
+            bind:fgInterval={fgInterval}
+            bind:sizeMulti={sizeMulti}
+            bind:speedMulti={speedMulti}
 
-        bind:startX={startX}
-        bind:startY={startY}
-        bind:startDir={startDir}
-        bind:bounceAngle={bounceAngle}
-    />
+            bind:startX={startX}
+            bind:startY={startY}
+            bind:startDir={startDir}
+            bind:bounceAngle={bounceAngle}
+        />
+    </div>
 
-    <button class="bg-red-600" on:click={photobounce.requestFullscreen} type=submit>Fullscreen</button>
-    <button class="bg-red-600" on:click={clearPhotos} type=submit>Clear Photos</button>
-    <button class="bg-red-600" on:click={photobounce.reset} type=submit>Restart</button>
+    <div class="table justify-center text-2xl text-white pt-16">
+        <button class="table-cell bg-green-600 mr-16" on:click={photobounce.requestFullscreen} type=submit>Fullscreen</button>
+        <button class="table-cell bg-green-600 mr-16" on:click={clearPhotos} type=submit>Clear Photos</button>
+        <button class="table-cell bg-green-600" on:click={photobounce.reset} type=submit>Restart</button>
+    </div>
 </div>

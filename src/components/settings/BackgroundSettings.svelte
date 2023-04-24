@@ -26,50 +26,50 @@
     }
 </script>
 
-<input class="hidden" accept="image/png, image/jpeg, image/jpg" multiple type="file" bind:this={bgFileInput} bind:files={uploads}/>
-<div class="justify-center">
-    
-    <div class="flex flex-row justify-center">
-        <button class="bg-red-600" on:click={() => {uploadBackgroundPhotos()}}>Upload Background Images</button>
-    </div>
+<input class="is-hidden" accept="image/png, image/jpeg, image/jpg" multiple type="file" bind:this={bgFileInput} bind:files={uploads}/>
+<div class="flex flex-col justify-center items-center pt-8">
 
-    <div class="flex flex-row justify-center">
+    <div class="flex row-auto justify-center align-middle w-11/12 h-40 outline" >
         {#if bgPhotos && bgPhotos.length > 0}
             <PhotoList bind:photolist={bgPhotos}/>
         {:else}
-            <div>No Photos Selected</div>
+            <div class="flex mb-auto mt-auto align-middle">No Photos Selected</div>
         {/if}
     </div>
 
-    <div class="flex flex-row justify-center">
-        <div class="text-lg">Change Background Image:</div>
-        {#if !bounce}
-            <label class="pr-1 text-lg">
-                Every {bgInterval} seconds (1 - 600):
-                <input class="border border-black" type="number" max="600" min="1" bind:value={interval}/>
-            </label>
-        {/if}
-        <label class="text-lg pl-1">
+    <div class="flex justify-center pt-4">
+        <button class="bg-green-600 text-white" on:click={() => {uploadBackgroundPhotos()}}>Upload Background Images</button>
+    </div>
+
+    <div class="table justify-center text-2xl pt-4">
+        <div class="table-cell pr-8">Change Background Image:</div>
+        <label class="table-cell pr-8">
             <input type="checkbox" bind:checked={bounce}/>
             On Bounce
         </label>
+        <div class={bounce ? "invisible table" : "table"}>
+            <div class="table-cell pr-2">
+                Every {bgInterval} seconds (1 - 600):
+            </div>
+            <input class="table-cell border" type="number" max="600" min="1" bind:value={interval}/>
+        </div>
     </div>
 
-    <div class="flex flex-row justify-center">
-        <div class="text-lg float-left pr-2">Display Background Image:</div>
-        <label class="float-left pr-2">
-            <input class="border border-black" type=radio value={"cover"} bind:group={bgImageSize}/>
+    <div class="table justify-center text-2xl pt-4">
+        <div class="table-cell pr-8">Display Background Image:</div>
+        <label class="table-cell pr-8">
+            <input class="border pr-2" type=radio value={"cover"} bind:group={bgImageSize}/>
             Fill Screen
         </label>
-        <label class=" float-left pr-2">
-            <input class="border border-black" type=radio value={"contain"} bind:group={bgImageSize}/>
+        <label class="table-cell pr-8">
+            <input class="border pr-2" type=radio value={"contain"} bind:group={bgImageSize}/>
             Fit To Screen
         </label>
-        {#if bgImageSize == "contain"}
-            <label class="float-left">
+        <div class={bgImageSize == "contain" ? "table" : "invisible table"}>
+            <label class="table-cell">
                 Background Color:
-                <input type="color" bind:value={bgColor}/>
+                <input class="border ml-2" type="color" bind:value={bgColor}/>
             </label>
-        {/if}
+        </div>
     </div>
 </div>

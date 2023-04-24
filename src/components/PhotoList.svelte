@@ -23,16 +23,16 @@
     }   
 </script>
 
-<div class=" overflow-x-scroll">
+<div class="overflow-x-scroll justify-center items-center w-full h-full">
     <SortableList
-        class={'flex'}
+        class={'flex w-full h-full'}
         swapThreshold={0.7}
         animation={150}
         direction={'horizontal'}
         onSort={handleOnSort}
     >
     {#each photolist as f (f.name) }
-        <img class=" pr-1 h-20 w-20 object-contain" src={URL.createObjectURL(f)} alt=""/>
+        <img class="inline-block align-middle object-contain pr-2 h-full w-40 mb-auto mt-auto" src={URL.createObjectURL(f)} alt=""/>
     {/each}
     </SortableList>
 </div>

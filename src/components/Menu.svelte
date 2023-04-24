@@ -1,8 +1,12 @@
 <script lang="ts">
-    import { Tabs, TabItem } from 'flowbite-svelte';
+    // @ts-ignore
+    import { Tabs,Tab } from 'svelte-chota';
+    import 'chota';
     import BackgroundSettings from './settings/BackgroundSettings.svelte';
     import BounceSettings from './settings/BounceSettings.svelte';
     import AdvancedSettings from './settings/AdvancedSettings.svelte';
+
+    let active: string = "background";
 
     // Background Settings
     export let bgPhotos: File[];
@@ -23,38 +27,39 @@
     export let startY: number;
     export let startDir: number;
     export let bounceAngle: number;
-
 </script>
-  
-<Tabs style="pill">
-    <TabItem open>
-        <span slot="title">Background</span>
-        <BackgroundSettings
-            bind:bgPhotos={bgPhotos}
-            bind:bgImageSize={bgImageSize}
-            bind:bgColor={bgColor}
-            bind:bgInterval={bgInterval}
-        />
-    </TabItem>
-    <TabItem>
-        <span slot="title">Bounce</span>
-        <BounceSettings
-            bind:fgPhotos={fgPhotos}
-            bind:fgImageSize={fgImageSize}
-            bind:fgColor={fgColor}
-            bind:fgInterval={fgInterval}
-            bind:sizeMulti={sizeMulti}
-            bind:speedMulti={speedMulti}
-        />
-    </TabItem>
-    <TabItem>
-        <span slot="title">Advanced</span>
-        <AdvancedSettings
-            bind:startX={startX}
-            bind:startY={startY}
-            bind:startDir={startDir}
-            bind:bounceAngle={bounceAngle}
-        />
-    </TabItem>
-</Tabs>
+
+<div class="w-full h-full bg-slate-200">
+    <Tabs full bind:active={active}>
+        <Tab tabid="background">Background</Tab>
+        <Tab tabid="bounce">Bounce</Tab>
+        <Tab tabid="advanced">Advanced</Tab>
+    </Tabs>
+    <div class="w-full h-full overflow-y-auto bg-slate-400">
+        {#if active === "background"}
+            <BackgroundSettings
+                bind:bgPhotos={bgPhotos}
+                bind:bgImageSize={bgImageSize}
+                bind:bgColor={bgColor}
+                bind:bgInterval={bgInterval}
+            />
+        {:else if active === "bounce"}
+            <BounceSettings
+                bind:fgPhotos={fgPhotos}
+                bind:fgImageSize={fgImageSize}
+                bind:fgColor={fgColor}
+                bind:fgInterval={fgInterval}
+                bind:sizeMulti={sizeMulti}
+                bind:speedMulti={speedMulti}
+            />
+        {:else}
+            <AdvancedSettings
+                bind:startX={startX}
+                bind:startY={startY}
+                bind:startDir={startDir}
+                bind:bounceAngle={bounceAngle}
+            />
+        {/if}
+    </div>
+</div>
 

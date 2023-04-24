@@ -61,7 +61,7 @@
             xSpeed = speedMulti * Math.cos(currDir* (Math.PI / 180));
             ySpeed = speedMulti * Math.sin(currDir* (Math.PI / 180));
         }
-        if(sizeMulti) {
+        if(sizeMulti || fgColor) {
             size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
             calculateImageDimensions();
         }
@@ -116,17 +116,15 @@
         let x = xPos;
         let y = yPos;
 
-        if((fgImageSize === "contain") && (fgColor === "#00000000") && (xBuffer !=0 || yBuffer != 0)) {
-            if(x > (parentWidth - (size - xBuffer))) {
-                x = parentWidth - (size - xBuffer);
-            } else if(x <= ((-1) * xBuffer)) {
-                x = (-1) * xBuffer;
-            }
-            if(y > (parentHeight - (size - yBuffer))) {
-                y = parentHeight - (size - yBuffer);
-            } else if(y <= ((-1) * yBuffer)) {
-                y = (-1) * yBuffer;
-            }
+        if(x > (parentWidth - (size - xBuffer))) {
+            x = parentWidth - (size - xBuffer);
+        } else if(x <= ((-1) * xBuffer)) {
+            x = (-1) * xBuffer;
+        }
+        if(y > (parentHeight - (size - yBuffer))) {
+            y = parentHeight - (size - yBuffer);
+        } else if(y <= ((-1) * yBuffer)) {
+            y = (-1) * yBuffer;
         }
 
         if(x >= (parentWidth - (size - xBuffer)) && (xSpeed > 0.0)) {
