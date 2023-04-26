@@ -24,8 +24,12 @@
     let startDir: number = 300;
     let bounceAngle: number = 90;
 
-    function clearPhotos(): void {
+    function clearBGPhotos(): void {
         bgPhotos = [];
+        photobounce.reset();
+    }
+
+    function clearFGPhotos(): void {
         fgPhotos = [];
         photobounce.reset();
     }
@@ -64,11 +68,13 @@
 
     <div class="flex items-center justify-center" style={`width:${60}vw;height:${20}vw;`}>
         <Menu
+            {clearBGPhotos}
             bind:bgPhotos={bgPhotos}
             bind:bgImageSize={bgImageSize}
             bind:bgColor={bgColor}
             bind:bgInterval={bgInterval}
 
+            {clearFGPhotos}
             bind:fgPhotos={fgPhotos}
             bind:fgImageSize={fgImageSize}
             bind:fgColor={fgColor}
@@ -85,7 +91,6 @@
 
     <div class="table justify-center text-2xl text-white pt-16">
         <button class="table-cell bg-green-600 mr-16" on:click={photobounce.requestFullscreen} type=submit>Fullscreen</button>
-        <button class="table-cell bg-green-600 mr-16" on:click={clearPhotos} type=submit>Clear Photos</button>
         <button class="table-cell bg-green-600" on:click={photobounce.reset} type=submit>Restart</button>
     </div>
 </div>

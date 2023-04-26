@@ -1,12 +1,14 @@
 <script lang="ts">
     import PhotoList from '../PhotoList.svelte';
 
+    export let clearBGPhotos: () => void;
+
     let bgFileInput: HTMLInputElement;
     let uploads: FileList;
     export let bgPhotos: File[];
 
     export let bgImageSize: string;
-    export let bgColor: string;
+    export let bgColor: string = "#000000";
 
     export let bgInterval: number;
     let interval: number = 10;
@@ -38,7 +40,8 @@
     </div>
 
     <div class="flex justify-center pt-4">
-        <button class="bg-green-600 text-white" on:click={() => {uploadBackgroundPhotos()}}>Upload Background Images</button>
+        <button class="bg-green-600 text-white mr-8" on:click={() => {uploadBackgroundPhotos()}}>Upload Background Images</button>
+        <button class="bg-green-600 text-white" on:click={clearBGPhotos}>Clear Photos</button>
     </div>
 
     <div class="table justify-center text-2xl pt-4">

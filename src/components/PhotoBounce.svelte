@@ -32,9 +32,10 @@
 
     let width: number;
     let height: number;
+    let isFull = false;
     let bgIndex = 0;
 
-    let clear: number;
+    let interval: number;
 
     onMount(() => {
         if (screenfull.isEnabled) {
@@ -47,10 +48,10 @@
         bounceComponent.reset();
         bgIndex = 0;
         if(bgPhotos && bgInterval > 0) {
-            clearInterval(clear);
-            clear = setInterval(nextBGPhoto, bgInterval * 1000);
+            clearInterval(interval);
+            interval = setInterval(nextBGPhoto, bgInterval * 1000);
         } else {
-            clearInterval(clear);
+            clearInterval(interval);
         }
     }
 
@@ -70,18 +71,20 @@
     export function requestFullscreen() {
         if (screenfull.isEnabled && component?.nextElementSibling) {
             screenfull.request(component.nextElementSibling);
+            isFull = true;
         }
     };
 
     export function exitFullscreen() {
         if (screenfull.isEnabled && component?.nextElementSibling) {
             screenfull.exit();
+            isFull = false;
         }
     }
 </script>
 
 <div style="width:0; height:0" bind:this={component}/>
-<div class="flex relative items-center justify-center" style={`width:${initWidth}vw;height:${initHeight}vh;background-color:${bgColor};`} bind:clientWidth={width} bind:clientHeight={height} use:resize={reset}>
+<div class="flex relative items-center justify-center" style={isFull ? `background-color:${bgColor};` : `width:${initWidth}vw;height:${initHeight}vh;background-color:${bgColor};`} bind:clientWidth={width} bind:clientHeight={height} use:resize={reset}>
     {#if bgPhotos && bgPhotos.length > 0}
         <img class="w-full h-full" style={`object-fit:${bgImageSize};`} src={URL.createObjectURL(bgPhotos[bgIndex])} alt=""/>
     {/if}

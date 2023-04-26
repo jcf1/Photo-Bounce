@@ -9,12 +9,14 @@
     let active: string = "background";
 
     // Background Settings
+    export let clearBGPhotos: () => void;
     export let bgPhotos: File[];
     export let bgImageSize: string;
     export let bgColor: string;
     export let bgInterval: number;
 
     // Foreground (or Bounce) Settings
+    export let clearFGPhotos: () => void;
     export let fgPhotos: File[];
     export let fgImageSize: string;
     export let fgColor: string;
@@ -38,6 +40,7 @@
     <div class="w-full h-full overflow-y-auto bg-slate-400">
         {#if active === "background"}
             <BackgroundSettings
+                {clearBGPhotos}
                 bind:bgPhotos={bgPhotos}
                 bind:bgImageSize={bgImageSize}
                 bind:bgColor={bgColor}
@@ -45,6 +48,7 @@
             />
         {:else if active === "bounce"}
             <BounceSettings
+                {clearFGPhotos}
                 bind:fgPhotos={fgPhotos}
                 bind:fgImageSize={fgImageSize}
                 bind:fgColor={fgColor}
@@ -62,4 +66,10 @@
         {/if}
     </div>
 </div>
+
+<style global>
+  span.active {
+    background-color: white;
+  }
+</style>
 

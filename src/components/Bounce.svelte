@@ -116,6 +116,7 @@
         let x = xPos;
         let y = yPos;
 
+        // Prevent bounce image from going outside parent dimensions
         if(x > (parentWidth - (size - xBuffer))) {
             x = parentWidth - (size - xBuffer);
         } else if(x <= ((-1) * xBuffer)) {
@@ -127,6 +128,7 @@
             y = (-1) * yBuffer;
         }
 
+        // Check for collision with left or right wall
         if(x >= (parentWidth - (size - xBuffer)) && (xSpeed > 0.0)) {
             nextBGPhoto();
             if(fgInterval === 0) {
@@ -139,7 +141,6 @@
             } else {
                 currDir = (currDir + bounceAngle) % 360;
             }
-
             xSpeed = speedMulti * Math.cos(currDir * (Math.PI / 180));
             ySpeed = speedMulti * Math.sin(currDir * (Math.PI / 180));
         } else if((x <= ((-1) * xBuffer)) && (xSpeed < 0.0)) {
@@ -158,6 +159,7 @@
             ySpeed = speedMulti * Math.sin(currDir * (Math.PI / 180));
         }
 
+        // Check for collision with top or bottom wall
         if(y >= (parentHeight - (size - yBuffer)) && (ySpeed > 0.0)) {
             nextBGPhoto();
             if(fgInterval === 0) {
@@ -193,7 +195,7 @@
         y = y + (ySpeed * parentHeight);
         xPos = x;
         yPos = y;
-        bounceStyle = `width:${size}px;height:${size}px;top:${y}px;left:${x}px;background-color:${fgColor};`
+        bounceStyle = `width:${size}px;height:${size}px;top:${y}px;left:${x}px;background-color:${fgColor};`;
     }
 </script>
 

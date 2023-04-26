@@ -1,6 +1,8 @@
 <script lang="ts">
     import PhotoList from '../PhotoList.svelte';
 
+    export let clearFGPhotos: () => void;
+
     let fgFileInput: HTMLInputElement;
     export let fgPhotos: File[];
     export let fgImageSize: string;
@@ -11,7 +13,7 @@
     
     let uploads: FileList;
     let transparent: boolean = true;
-    let color: string;
+    let color: string = "#ffffff";
     let interval: number = 10;
     let bounce: boolean = true;
 
@@ -43,7 +45,8 @@
     </div>
 
     <div class="flex justify-center pt-4">
-        <button class="bg-green-600 text-white" on:click={() => {uploadBouncePhotos()}}>Upload Bounce Images</button>
+        <button class="bg-green-600 text-white mr-8" on:click={() => {uploadBouncePhotos()}}>Upload Bounce Images</button>
+        <button class="bg-green-600 text-white" on:click={clearFGPhotos}>Clear Photos</button>
     </div>
 
     <div class="table justify-center text-2xl pt-4">
@@ -61,7 +64,7 @@
     </div>
 
     <div class="table justify-center text-2xl pt-4">
-        <div class="table-cell pr-8">Display Foreground Image:</div>
+        <div class="table-cell pr-8">Display Bounce Image:</div>
         <label class="table-cell pr-4">
             <input class="border pr-2" type=radio value={"cover"} bind:group={fgImageSize}/>
             Fill Container
