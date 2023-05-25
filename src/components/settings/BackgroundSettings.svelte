@@ -3,24 +3,35 @@
 
     export let clearBGPhotos: () => void;
 
+    export let bgPhotos: File[];
+    export let bgImageSize: string;
+    export let bgColor: string;
+    export let bgBounce: boolean;
+    export let bgInterval: number;
+
     let bgFileInput: HTMLInputElement;
     let uploads: FileList;
-    export let bgPhotos: File[];
 
-    export let bgImageSize: string;
-    export let bgColor: string = "#000000";
-
-    export let bgInterval: number;
-    let interval: number = 10;
-    let bounce: boolean = false;
-
-    $: bgInterval = bounce ? 0 : interval;
     $: if(uploads && uploads.length > 0) {
         updatePhotos()
     }
 
     function updatePhotos() {
         bgPhotos = bgPhotos.concat(Array.from(uploads));
+    }
+
+    function shufflBackgroundImages() {
+        if(bgPhotos != null && bgPhotos.length == 0) {
+            return;
+        }
+
+        var j, x, i;
+        for (i = bgPhotos.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            x = bgPhotos[i];
+            bgPhotos[i] = bgPhotos[j];
+            bgPhotos[j] = x;
+        }
     }
 
     function uploadBackgroundPhotos() {
@@ -40,21 +51,22 @@
     </div>
 
     <div class="flex justify-center pt-4">
-        <button class="bg-green-600 text-white mr-8" on:click={() => {uploadBackgroundPhotos()}}>Upload Background Images</button>
-        <button class="bg-green-600 text-white" on:click={clearBGPhotos}>Clear Photos</button>
+        <button class="bg-green-600 text-white mr-8" on:click={uploadBackgroundPhotos}>Upload Background Images</button>
+        <button class="bg-green-600 text-white mr-8" on:click={shufflBackgroundImages}>Shuffle Images</button>
+        <button class="bg-green-600 text-white" on:click={clearBGPhotos}>Clear Images</button>
     </div>
 
     <div class="table justify-center text-2xl pt-4">
         <div class="table-cell pr-8">Change Background Image:</div>
         <label class="table-cell pr-8">
-            <input type="checkbox" bind:checked={bounce}/>
+            <input type="checkbox" bind:checked={bgBounce}/>
             On Bounce
         </label>
-        <div class={bounce ? "invisible table" : "table"}>
+        <div class={bgBounce ? "invisible table" : "table"}>
             <div class="table-cell pr-2">
                 Every {bgInterval} seconds (1 - 600):
             </div>
-            <input class="table-cell border" type="number" max="600" min="1" bind:value={interval}/>
+            <input class="table-cell border" type="number" max="600" min="1" bind:value={bgInterval}/>
         </div>
     </div>
 

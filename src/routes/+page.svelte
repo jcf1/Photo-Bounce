@@ -8,13 +8,16 @@
     let bgPhotos: File[] = [];
     let bgImageSize: string = "cover";
     let bgColor: string =  "#000000";
+    let bgBounce: boolean = false;
     let bgInterval: number = 10;
 
     // Foreground (or Bounce) Settings
     let fgPhotos: File[] = [];
     let fgImageSize: string = "contain";
-    let fgColor: string = "#00000000";
-    let fgInterval: number = 0;
+    let fgTransparent: boolean = true;
+    let fgColor: string = "#000000";
+    let fgBounce: boolean = true;
+    let fgInterval: number = 10;
     let sizeMulti: number = 0.4;
     let speedMulti: number = 0.001;
 
@@ -51,12 +54,12 @@
         {bgPhotos}
         {bgImageSize}
         {bgColor}
-        {bgInterval}
+        bgInterval = {bgBounce ? 0 : bgInterval}
 
         {fgPhotos}
         {fgImageSize}
-        {fgColor}
-        {fgInterval}
+        fgColor = {fgTransparent ? "#00000000" : fgColor}
+        fgInterval = {fgBounce ? 0 : fgInterval}
         {sizeMulti}
         {speedMulti}
 
@@ -72,12 +75,15 @@
             bind:bgPhotos={bgPhotos}
             bind:bgImageSize={bgImageSize}
             bind:bgColor={bgColor}
+            bind:bgBounce={bgBounce}
             bind:bgInterval={bgInterval}
 
             {clearFGPhotos}
             bind:fgPhotos={fgPhotos}
             bind:fgImageSize={fgImageSize}
+            bind:fgTransparent={fgTransparent}
             bind:fgColor={fgColor}
+            bind:fgBounce={fgBounce}
             bind:fgInterval={fgInterval}
             bind:sizeMulti={sizeMulti}
             bind:speedMulti={speedMulti}

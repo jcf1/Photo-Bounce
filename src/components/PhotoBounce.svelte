@@ -37,6 +37,8 @@
 
     let interval: number;
 
+    $: if(bgInterval >= 0) { resetInterval(); }
+
     onMount(() => {
         if (screenfull.isEnabled) {
             screenfull.on("change", () => dispatch("change"));
@@ -44,15 +46,19 @@
         }
     });
 
-    export function reset() {
-        bounceComponent.reset();
-        bgIndex = 0;
+    export function resetInterval() {
         if(bgPhotos && bgInterval > 0) {
             clearInterval(interval);
             interval = setInterval(nextBGPhoto, bgInterval * 1000);
         } else {
             clearInterval(interval);
         }
+    }
+
+    export function reset() {
+        bounceComponent.reset();
+        bgIndex = 0;
+        resetInterval();
     }
 
     function nextBGPhoto(): void {

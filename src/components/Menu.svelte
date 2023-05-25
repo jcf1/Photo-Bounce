@@ -13,13 +13,16 @@
     export let bgPhotos: File[];
     export let bgImageSize: string;
     export let bgColor: string;
+    export let bgBounce: boolean;
     export let bgInterval: number;
 
     // Foreground (or Bounce) Settings
     export let clearFGPhotos: () => void;
     export let fgPhotos: File[];
     export let fgImageSize: string;
+    export let fgTransparent: boolean;
     export let fgColor: string;
+    export let fgBounce: boolean;
     export let fgInterval: number;
     export let sizeMulti: number;
     export let speedMulti: number;
@@ -37,13 +40,14 @@
         <Tab tabid="bounce">Bounce</Tab>
         <Tab tabid="advanced">Advanced</Tab>
     </Tabs>
-    <div class="w-full h-full overflow-y-auto bg-slate-400">
+    <div class="w-full h-full overflow-y-scroll hover:scroll-auto bg-slate-400">
         {#if active === "background"}
             <BackgroundSettings
                 {clearBGPhotos}
                 bind:bgPhotos={bgPhotos}
                 bind:bgImageSize={bgImageSize}
                 bind:bgColor={bgColor}
+                bind:bgBounce={bgBounce}
                 bind:bgInterval={bgInterval}
             />
         {:else if active === "bounce"}
@@ -51,7 +55,9 @@
                 {clearFGPhotos}
                 bind:fgPhotos={fgPhotos}
                 bind:fgImageSize={fgImageSize}
+                bind:fgTransparent={fgTransparent}
                 bind:fgColor={fgColor}
+                bind:fgBounce={fgBounce}
                 bind:fgInterval={fgInterval}
                 bind:sizeMulti={sizeMulti}
                 bind:speedMulti={speedMulti}

@@ -42,6 +42,19 @@
     let interval: number;
     let moveInterval: number;
 
+    $: if(mounted) {
+        if(speedMulti) {
+            xSpeed = speedMulti * Math.cos(currDir* (Math.PI / 180));
+            ySpeed = speedMulti * Math.sin(currDir* (Math.PI / 180));
+        }
+        if(sizeMulti || fgColor) {
+            size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
+            calculateImageDimensions();
+        }
+    }
+
+    $: if(fgInterval >= 0) { resetInterval(); }
+
     let mounted: boolean = false;
     onMount(() => {
         mounted = true;
@@ -56,14 +69,12 @@
         moveInterval = setInterval(move, 1);
     });
 
-    $: if(mounted) {
-        if(speedMulti) {
-            xSpeed = speedMulti * Math.cos(currDir* (Math.PI / 180));
-            ySpeed = speedMulti * Math.sin(currDir* (Math.PI / 180));
-        }
-        if(sizeMulti || fgColor) {
-            size = sizeMulti * (parentWidth < parentHeight ? parentWidth : parentHeight);
-            calculateImageDimensions();
+    function resetInterval(): void {
+        if(fgPhotos && fgInterval > 0) {
+            clearInterval(interval);
+            interval = setInterval(nextFGPhoto, fgInterval * 1000);
+        } else {
+            clearInterval(interval);
         }
     }
 
@@ -76,12 +87,7 @@
         xSpeed = speedMulti * Math.cos(currDir* (Math.PI / 180));
         yPos =  (startY * (parentHeight / 100)) - (size / 2);
         ySpeed = speedMulti * Math.sin(currDir* (Math.PI / 180));
-        if(fgPhotos && fgInterval > 0) {
-            clearInterval(interval);
-            interval = setInterval(nextFGPhoto, fgInterval * 1000);
-        } else {
-            clearInterval(interval);
-        }
+        resetInterval();
         calculateImageDimensions();
     }
 

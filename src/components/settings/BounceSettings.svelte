@@ -3,22 +3,18 @@
 
     export let clearFGPhotos: () => void;
 
-    let fgFileInput: HTMLInputElement;
     export let fgPhotos: File[];
     export let fgImageSize: string;
+    export let fgTransparent: boolean;
     export let fgColor: string;
+    export let fgBounce: boolean;
     export let fgInterval: number;
     export let sizeMulti: number;
     export let speedMulti: number;
     
+    let fgFileInput: HTMLInputElement;
     let uploads: FileList;
-    let transparent: boolean = true;
-    let color: string = "#ffffff";
-    let interval: number = 10;
-    let bounce: boolean = true;
 
-    $: fgInterval = bounce ? 0 : interval;
-    $: fgColor = transparent ? "#00000000" : color;
     $: if(uploads && uploads.length > 0) {
         updatePhotos()
     }
@@ -27,9 +23,22 @@
         fgPhotos = fgPhotos.concat(Array.from(uploads));
     }
 
+    function shufflBounceImages() {
+        if(fgPhotos != null && fgPhotos.length == 0) {
+            return;
+        }
+
+        var j, x, i;
+        for (i = fgPhotos.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            x = fgPhotos[i];
+            fgPhotos[i] = fgPhotos[j];
+            fgPhotos[j] = x;
+        }
+    }
+
     function uploadBouncePhotos() {
         fgFileInput.click();
-        fgPhotos = fgPhotos;
     }
 </script>
 
@@ -45,21 +54,22 @@
     </div>
 
     <div class="flex justify-center pt-4">
-        <button class="bg-green-600 text-white mr-8" on:click={() => {uploadBouncePhotos()}}>Upload Bounce Images</button>
-        <button class="bg-green-600 text-white" on:click={clearFGPhotos}>Clear Photos</button>
+        <button class="bg-green-600 text-white mr-8" on:click={uploadBouncePhotos}>Upload Bounce Images</button>
+        <button class="bg-green-600 text-white mr-8" on:click={shufflBounceImages}>Shuffle Images</button>
+        <button class="bg-green-600 text-white" on:click={clearFGPhotos}>Clear Images</button>
     </div>
 
     <div class="table justify-center text-2xl pt-4">
         <div class="table-cell pr-8">Change Bounce Image:</div>
         <label class="table-cell pr-8">
-            <input type="checkbox" bind:checked={bounce}/>
+            <input type="checkbox" bind:checked={fgBounce}/>
             On Bounce
         </label>
-        <div class={bounce ? "invisible table" : "table"}>
+        <div class={fgBounce ? "invisible table" : "table"}>
             <div class="table-cell pr-2">
                 Every {fgInterval} seconds (1 - 600):
             </div>
-            <input class="table-cell border" type="number" max="600" min="1" bind:value={interval}/>
+            <input class="table-cell border" type="number" max="600" min="1" bind:value={fgInterval}/>
         </div>
     </div>
 
@@ -78,12 +88,12 @@
         <div class="table justify-center text-2xl pt-4">
             <div class="table-cell pr-8">Background Color:</div>
             <label class="table-cell pr-4">
-                <input class="border pr-2" type="checkbox" bind:checked={transparent}/>
+                <input class="border pr-2" type="checkbox" bind:checked={fgTransparent}/>
                 Transparent
             </label>
-            <label class={transparent ? "invisible table" : "table"}>
+            <label class={fgTransparent ? "invisible table" : "table"}>
                 or
-                <input class="border ml-4" type="color" bind:value={color}/>
+                <input class="border ml-4" type="color" bind:value={fgColor}/>
             </label>
         </div>
     {/if}
